@@ -7,7 +7,8 @@
 
     <fragment
         android:id="@+id/reminderListFragment"
-        android:name="com.adarsh.reminderapp.ui.ReminderListFragment"
+        android:name="com.adarsh.reminderapp.ui.list.ReminderListFragment"
         android:label="fragment_reminder_list"
         tools:layout="@layout/fragment_reminder_list" />
+<!--    todo ADD EditFrag-->
 </navigation>
