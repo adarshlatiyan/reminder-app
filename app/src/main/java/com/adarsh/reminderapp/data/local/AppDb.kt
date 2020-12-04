@@ -6,5 +6,8 @@ import com.adarsh.reminderapp.data.ReminderModel
 
 @Database(entities = [ReminderModel::class], version = 1)
 abstract class AppDb : RoomDatabase() {
+    companion object {
+        const val DB_NAME = "reminder_app_db"
+    }
     abstract fun reminderDao(): ReminderDao
 }

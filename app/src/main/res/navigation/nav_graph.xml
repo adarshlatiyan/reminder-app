@@ -9,6 +9,18 @@
         android:id="@+id/reminderListFragment"
         android:name="com.adarsh.reminderapp.ui.list.ReminderListFragment"
         android:label="fragment_reminder_list"
-        tools:layout="@layout/fragment_reminder_list" />
-<!--    todo ADD EditFrag-->
+        tools:layout="@layout/fragment_reminder_list" >
+        <action
+            android:id="@+id/action_reminderListFragment_to_editReminderFragment"
+            app:destination="@id/editReminderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editReminderFragment"
+        android:name="com.adarsh.reminderapp.ui.edit.EditReminderFragment"
+        android:label="fragment_edit_reminder"
+        tools:layout="@layout/fragment_edit_reminder" >
+        <argument
+            android:name="reminder"
+            app:argType="com.adarsh.reminderapp.data.ReminderModel" />
+    </fragment>
 </navigation>
