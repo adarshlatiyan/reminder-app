@@ -20,7 +20,7 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ReminderVie
 
     override fun getItemCount(): Int = differ.currentList.size
 
-    private fun submitList(list: List<ReminderModel>) {
+    fun submitList(list: List<ReminderModel>) {
         differ.submitList(list)
     }
 
