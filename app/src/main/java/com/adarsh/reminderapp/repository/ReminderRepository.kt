@@ -1,5 +1,6 @@
 package com.adarsh.reminderapp.repository
 
+import android.util.Log
 import com.adarsh.reminderapp.DataState
 import com.adarsh.reminderapp.data.ReminderModel
 import com.adarsh.reminderapp.data.local.ReminderDao
@@ -16,6 +17,7 @@ class ReminderRepository @Inject constructor(private val reminderDao: ReminderDa
             reminderDao.insertReminder(reminderModel)
             emit(DataState.Success(Unit))
         } catch (e: Exception) {
+            Log.e("TAG", "insertReminder: ", e)
             emit(DataState.Failure(e))
         }
     }

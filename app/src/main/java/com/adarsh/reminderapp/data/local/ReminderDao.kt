@@ -1,15 +1,12 @@
 package com.adarsh.reminderapp.data.local
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.adarsh.reminderapp.data.ReminderModel
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ReminderDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertReminder(reminder: ReminderModel)
 
     @Delete

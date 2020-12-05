@@ -21,6 +21,7 @@
         tools:layout="@layout/fragment_edit_reminder" >
         <argument
             android:name="reminder"
-            app:argType="com.adarsh.reminderapp.data.ReminderModel" />
+            app:argType="com.adarsh.reminderapp.data.ReminderModel"
+            app:nullable="true" />
     </fragment>
 </navigation>

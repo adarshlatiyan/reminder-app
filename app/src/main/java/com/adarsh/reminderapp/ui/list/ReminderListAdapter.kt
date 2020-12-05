@@ -7,11 +7,22 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.adarsh.reminderapp.data.ReminderModel
 import com.adarsh.reminderapp.databinding.ReminderItemBinding
+import javax.inject.Inject
 
-class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ReminderViewHolder>() {
+class ReminderListAdapter @Inject constructor() :
+    RecyclerView.Adapter<ReminderListAdapter.ReminderViewHolder>() {
+
+    var interactionListener: InteractionListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReminderViewHolder {
-        return ReminderViewHolder(ReminderItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ReminderViewHolder(
+            ReminderItemBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            ),
+            interactionListener
+        )
     }
 
     override fun onBindViewHolder(holder: ReminderViewHolder, position: Int) {
@@ -36,13 +47,24 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ReminderVie
 
     private val differ = AsyncListDiffer(this, diffCallback)
 
-    class ReminderViewHolder(private val binding: ReminderItemBinding) :
+    class ReminderViewHolder(
+        private val binding: ReminderItemBinding,
+        private val listener: InteractionListener?
+    ) :
         RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.root.setOnClickListener { listener?.onItemClick(adapterPosition) }
+        }
+
         fun bind(reminder: ReminderModel) {
             with(binding) {
                 textView.text = reminder.title
             }
         }
+    }
+
+    interface InteractionListener {
+        fun onItemClick(position: Int)
     }
 
 }

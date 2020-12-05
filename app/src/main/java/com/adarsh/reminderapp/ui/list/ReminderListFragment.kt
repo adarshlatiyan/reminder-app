@@ -12,20 +12,31 @@ import com.adarsh.reminderapp.data.ReminderModel
 import com.adarsh.reminderapp.databinding.FragmentReminderListBinding
 import com.adarsh.reminderapp.ui.list.ReminderListFragmentViewModel.ReminderListState.GetListState
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ReminderListFragment : Fragment(R.layout.fragment_reminder_list) {
     companion object {
         private const val TAG = "ReminderListFragment"
+        private lateinit var reminderList: List<ReminderModel>
     }
 
     private lateinit var binding: FragmentReminderListBinding
-    private val adapter = ReminderListAdapter()
+
+    @Inject
+    lateinit var adapter: ReminderListAdapter
+
 
     private val viewModel: ReminderListFragmentViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        adapter.interactionListener = object : ReminderListAdapter.InteractionListener {
+            override fun onItemClick(position: Int) {
+                navigateToEditScreen(reminderList[position])
+            }
+        }
 
         binding = FragmentReminderListBinding.bind(view)
 
@@ -43,6 +54,7 @@ class ReminderListFragment : Fragment(R.layout.fragment_reminder_list) {
                 }
                 is DataState.Success -> {
                     hideLoading()
+                    reminderList = it.data
                     adapter.submitList(it.data)
                 }
                 is DataState.Failure -> {
