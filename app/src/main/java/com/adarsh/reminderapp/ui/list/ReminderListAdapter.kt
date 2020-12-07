@@ -54,17 +54,20 @@ class ReminderListAdapter @Inject constructor() :
         RecyclerView.ViewHolder(binding.root) {
         init {
             binding.root.setOnClickListener { listener?.onItemClick(adapterPosition) }
+            binding.ivDelete.setOnClickListener { listener?.onItemDeleteClicked(adapterPosition) }
         }
 
         fun bind(reminder: ReminderModel) {
             with(binding) {
-                textView.text = reminder.title
+                tvTitle.text = reminder.title
+                tvDescription.text = reminder.description
             }
         }
     }
 
     interface InteractionListener {
         fun onItemClick(position: Int)
+        fun onItemDeleteClicked(position: Int)
     }
 
 }

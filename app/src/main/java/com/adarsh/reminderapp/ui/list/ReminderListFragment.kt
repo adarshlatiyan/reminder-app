@@ -2,6 +2,7 @@ package com.adarsh.reminderapp.ui.list
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -36,6 +37,14 @@ class ReminderListFragment : Fragment(R.layout.fragment_reminder_list) {
             override fun onItemClick(position: Int) {
                 navigateToEditScreen(reminderList[position])
             }
+
+            override fun onItemDeleteClicked(position: Int) {
+                viewModel.setState(
+                    ReminderListFragmentViewModel.ReminderListState.DeleteItem(
+                        reminderList[position]
+                    )
+                )
+            }
         }
 
         binding = FragmentReminderListBinding.bind(view)
@@ -55,13 +64,23 @@ class ReminderListFragment : Fragment(R.layout.fragment_reminder_list) {
                 is DataState.Success -> {
                     hideLoading()
                     reminderList = it.data
-                    adapter.submitList(it.data)
+                    adapter.submitList(reminderList)
                 }
                 is DataState.Failure -> {
                     hideLoading()
                 }
             }
         }
+
+        viewModel.deleteDataState.observe(viewLifecycleOwner) {
+            if (it is DataState.Failure) {
+                showError()
+            }
+        }
+    }
+
+    private fun showError() {
+        Toast.makeText(requireContext(), "Some error occurred!", Toast.LENGTH_SHORT).show()
     }
 
     private fun initViews() {

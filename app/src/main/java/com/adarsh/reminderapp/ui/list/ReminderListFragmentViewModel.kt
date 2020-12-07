@@ -13,15 +13,19 @@ import kotlinx.coroutines.withContext
 class ReminderListFragmentViewModel
 @ViewModelInject constructor(
     private val repository: ReminderRepository,
-    @Assisted savedStateHandle: SavedStateHandle
+    @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val _dataState = MutableLiveData<DataState<List<ReminderModel>>>()
     val dataState: LiveData<DataState<List<ReminderModel>>>
         get() = _dataState
 
+    private val _deleteDataState = MutableLiveData<DataState<Unit>>()
+    val deleteDataState: LiveData<DataState<Unit>>
+        get() = _deleteDataState
+
     fun setState(state: ReminderListState) {
         viewModelScope.launch {
-            when(state) {
+            when (state) {
                 is ReminderListState.GetListState -> {
                     repository.getAllReminders().collect {
                         withContext(viewModelScope.coroutineContext) {
@@ -29,6 +33,15 @@ class ReminderListFragmentViewModel
                         }
                     }
                 }
+
+                is ReminderListState.DeleteItem -> {
+                    repository.deleteReminder(state.reminder).collect {
+                        withContext(viewModelScope.coroutineContext) {
+                            _deleteDataState.value = it
+                        }
+                    }
+                }
+
                 is ReminderListState.None -> {}
             }
         }
@@ -36,6 +49,7 @@ class ReminderListFragmentViewModel
 
     sealed class ReminderListState {
         object GetListState : ReminderListState()
+        data class DeleteItem(val reminder: ReminderModel) : ReminderListState()
         object None : ReminderListState()
     }
 }
