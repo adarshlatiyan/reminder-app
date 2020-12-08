@@ -6,6 +6,7 @@ import androidx.lifecycle.*
 import com.adarsh.reminderapp.util.DataState
 import com.adarsh.reminderapp.data.ReminderModel
 import com.adarsh.reminderapp.repository.ReminderRepository
+import com.adarsh.reminderapp.util.AlarmHelper
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -13,6 +14,7 @@ import kotlinx.coroutines.withContext
 class ReminderListFragmentViewModel
 @ViewModelInject constructor(
     private val repository: ReminderRepository,
+    private val alarmHelper: AlarmHelper,
     @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val _dataState = MutableLiveData<DataState<List<ReminderModel>>>()
@@ -39,6 +41,7 @@ class ReminderListFragmentViewModel
                         withContext(viewModelScope.coroutineContext) {
                             _deleteDataState.value = it
                         }
+                        alarmHelper.cancelAlarm(state.reminder.pk)
                     }
                 }
 

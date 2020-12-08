@@ -8,16 +8,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.adarsh.reminderapp.util.DataState
 import com.adarsh.reminderapp.R
 import com.adarsh.reminderapp.data.ReminderModel
 import com.adarsh.reminderapp.databinding.DatePickerLayoutBinding
 import com.adarsh.reminderapp.databinding.FragmentEditReminderBinding
 import com.adarsh.reminderapp.databinding.TimePickerLayoutBinding
+import com.adarsh.reminderapp.util.DataState
 import com.adarsh.reminderapp.util.getDateString
 import com.adarsh.reminderapp.util.getTimeString
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import java.text.SimpleDateFormat
 import java.util.*
 
 @AndroidEntryPoint
@@ -86,15 +86,17 @@ class EditReminderFragment : Fragment(R.layout.fragment_edit_reminder) {
                 val title = etTitle.text.toString()
                 val description = etDescription.text.toString()
 
-                val reminderModel = ReminderModel(
-                    title,
-                    description,
-                    pickedCalendar.timeInMillis
-                ).apply { if (reminder != null) pk = reminder.pk }
+                if (validateInput()) {
+                    val reminderModel = ReminderModel(
+                        title,
+                        description,
+                        pickedCalendar.timeInMillis
+                    ).apply { if (reminder != null) pk = reminder.pk }
 
-                viewModel.setState(
-                    EditReminderFragmentViewModel.EditStateEvent.InsertEvent(reminderModel)
-                )
+                    viewModel.setState(
+                        EditReminderFragmentViewModel.EditStateEvent.InsertEvent(reminderModel)
+                    )
+                }
             }
 
             ivCalendar.setOnClickListener { datePickerDialog.show() }
@@ -110,6 +112,13 @@ class EditReminderFragment : Fragment(R.layout.fragment_edit_reminder) {
         }
 
         with(timePickerLayoutBinding) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                timePicker.hour = pickedCalendar.get(Calendar.HOUR_OF_DAY)
+                timePicker.minute = pickedCalendar.get(Calendar.MINUTE)
+            } else {
+                timePicker.currentHour = pickedCalendar.get(Calendar.HOUR_OF_DAY)
+                timePicker.currentMinute = pickedCalendar.get(Calendar.MINUTE)
+            }
             saveButton.setOnClickListener {
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                     setTime(timePicker.hour, timePicker.minute)
@@ -122,12 +131,39 @@ class EditReminderFragment : Fragment(R.layout.fragment_edit_reminder) {
         }
 
         with(datePickerLayoutBinding) {
+            with(datePicker) {
+                minDate = Calendar.getInstance().timeInMillis
+                updateDate(
+                    pickedCalendar.get(Calendar.YEAR),
+                    pickedCalendar.get(Calendar.MONTH),
+                    pickedCalendar.get(Calendar.DAY_OF_MONTH)
+                )
+            }
             saveButton.setOnClickListener {
                 with(datePicker) { setDate(dayOfMonth, month, year) }
                 binding.tvDate.text = getDateString(pickedCalendar)
                 datePickerDialog.dismiss()
             }
         }
+    }
+
+    private fun validateInput(): Boolean {
+        var result = true
+        with(binding) {
+            if (etTitle.text.toString().isEmpty()) {
+                etTitle.error = "Title can not be empty"
+                result = false
+            }
+            if (etDescription.text.toString().isEmpty()) {
+                etDescription.error = "Description can not be empty"
+                result = false
+            }
+            if (pickedCalendar.time.before(Calendar.getInstance().time)) {
+                Snackbar.make(binding.root, "Please select a time in the future", Snackbar.LENGTH_SHORT).show()
+                result = false
+            }
+        }
+        return result
     }
 
     private fun setDate(day: Int, month: Int, year: Int) {

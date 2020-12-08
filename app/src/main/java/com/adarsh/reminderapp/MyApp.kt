@@ -7,7 +7,9 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import com.adarsh.reminderapp.util.AlarmHelper
 import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 
 @HiltAndroidApp
 class MyApp : Application() {
@@ -17,6 +19,9 @@ class MyApp : Application() {
         const val NOTIFICATION_CHANNEL_ID =  "alarm_notification"
         const val NOTIFICATION_CHANNEL_NAME =  "Alarm Notification"
     }
+
+    @Inject
+    lateinit var alarmHelper: AlarmHelper
 
     override fun onCreate() {
         super.onCreate()

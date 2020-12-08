@@ -6,17 +6,22 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
+import com.adarsh.reminderapp.data.local.ReminderDao
+import com.adarsh.reminderapp.util.AlarmHelper
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class AlarmReceiver : BroadcastReceiver() {
     companion object {
         private const val TAG = "AlarmReceiver"
-
-        const val REMINDER_REQUEST_CODE = 1000
     }
 
+    @Inject lateinit var dao: ReminderDao
+
     override fun onReceive(context: Context?, intent: Intent?) {
-        Log.d(TAG, "onReceive: ")
+        Log.d(TAG, "onReceive: ${intent?.getIntExtra(AlarmHelper.EXTRA_REMINDER_PK, -1)}")
+
         val notification = NotificationCompat.Builder(context!!, MyApp.NOTIFICATION_CHANNEL_ID)
             .setContentTitle("Test")
             .setContentText("Hello, this is a test")
