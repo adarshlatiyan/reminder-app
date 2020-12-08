@@ -3,7 +3,7 @@ package com.adarsh.reminderapp.ui.edit
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
-import com.adarsh.reminderapp.DataState
+import com.adarsh.reminderapp.util.DataState
 import com.adarsh.reminderapp.data.ReminderModel
 import com.adarsh.reminderapp.repository.ReminderRepository
 import kotlinx.coroutines.flow.collect

@@ -1,13 +1,12 @@
 package com.adarsh.reminderapp.repository
 
 import android.util.Log
-import com.adarsh.reminderapp.DataState
+import com.adarsh.reminderapp.util.DataState
 import com.adarsh.reminderapp.data.ReminderModel
 import com.adarsh.reminderapp.data.local.ReminderDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class ReminderRepository @Inject constructor(private val reminderDao: ReminderDao) {

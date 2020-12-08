@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Reminder App</string>
+    <string name="delete_icon_description">Delete Icon</string>
+    <string name="description_hint">Description...</string>
+    <string name="save_reminder_description">Save Reminder</string>
+    <string name="title_hint">Enter a title...</string>
+    <string name="okay">Okay</string>
 </resources>

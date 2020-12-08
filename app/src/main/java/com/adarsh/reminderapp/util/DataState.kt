@@ -1,4 +1,4 @@
-package com.adarsh.reminderapp
+package com.adarsh.reminderapp.util
 
 sealed class DataState<out R> {
     data class Success<out T>(val data: T) : DataState<T>()
