@@ -20,9 +20,6 @@ class MyApp : Application() {
         const val NOTIFICATION_CHANNEL_NAME =  "Alarm Notification"
     }
 
-    @Inject
-    lateinit var alarmHelper: AlarmHelper
-
     override fun onCreate() {
         super.onCreate()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
