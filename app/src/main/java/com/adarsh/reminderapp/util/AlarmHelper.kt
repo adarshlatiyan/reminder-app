@@ -30,7 +30,7 @@ class AlarmHelper @Inject constructor(@ApplicationContext private val context: C
         }
         val pi = PendingIntent.getBroadcast(context, pk, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis - 1000, pi)
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pi)
 
 //        RESTART ALARM IF DEVICE IS REBOOTED
 

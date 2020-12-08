@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.adarsh.reminderapp.data.ReminderModel
 import com.adarsh.reminderapp.databinding.ReminderItemBinding
+import com.adarsh.reminderapp.util.getDateString
+import com.adarsh.reminderapp.util.getTimeString
+import java.util.*
 import javax.inject.Inject
 
 class ReminderListAdapter @Inject constructor() :
@@ -60,7 +63,9 @@ class ReminderListAdapter @Inject constructor() :
         fun bind(reminder: ReminderModel) {
             with(binding) {
                 tvTitle.text = reminder.title
-                tvDescription.text = reminder.description
+                val cal = Calendar.getInstance().apply { timeInMillis = reminder.timeInMillis }
+                val dateTime = "${getDateString(cal)} at ${getTimeString(cal)}"
+                tvDescription.text = dateTime
             }
         }
     }
